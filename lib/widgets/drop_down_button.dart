@@ -1,6 +1,9 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/request_provider.dart';
 
 class CustomDropdownButton extends StatefulWidget {
   final List<dynamic> items;
@@ -34,6 +37,7 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton> {
 
   @override
   Widget build(BuildContext context) {
+    final req = context.read<RequestProvider>();
     final Size size = MediaQuery.of(context).size;
     return SizedBox(
       width: size.width * 0.42,
@@ -54,6 +58,11 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton> {
           onChanged: (newValue) {
             setState(() {
               _selectedItem = newValue!;
+              if (widget.type == 'category') {
+                req.categor.text = _selectedItem;
+              } else {
+                req.departmen.text = _selectedItem;
+              }
             });
           },
         ),
