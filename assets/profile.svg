@@ -1,0 +1,10 @@
+<svg id="vuesax_linear_profile" data-name="vuesax/linear/profile" xmlns="http://www.w3.org/2000/svg" width="22.098" height="22.098" viewBox="0 0 22.098 22.098">
+  <g id="profile" transform="translate(0 0)">
+    <path id="Vector" d="M4.235,8.167a1.674,1.674,0,0,0-.3,0,4.093,4.093,0,1,1,.3,0Z" transform="translate(6.961 1.842)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+    <path id="Vector-2" data-name="Vector" d="M1.671,1.264c-2.228,1.492-2.228,3.922,0,5.4a8.992,8.992,0,0,0,9.217,0c2.228-1.492,2.228-3.922,0-5.4A9.034,9.034,0,0,0,1.671,1.264Z" transform="translate(4.921 12.142)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+    <g id="Vector-3" data-name="Vector" transform="translate(22.098 22.098) rotate(180)" fill="none" opacity="0">
+      <path d="M0,0H22.1V22.1H0Z" stroke="none"/>
+      <path d="M 1.000001907348633 1.000001907348633 L 1.000001907348633 21.09806060791016 L 21.09806060791016 21.09806060791016 L 21.09806060791016 1.000001907348633 L 1.000001907348633 1.000001907348633 M 1.9073486328125e-06 1.9073486328125e-06 L 22.09806060791016 1.9073486328125e-06 L 22.09806060791016 22.09806060791016 L 1.9073486328125e-06 22.09806060791016 L 1.9073486328125e-06 1.9073486328125e-06 Z" stroke="none" fill="#fff"/>
+    </g>
+  </g>
+</svg>
