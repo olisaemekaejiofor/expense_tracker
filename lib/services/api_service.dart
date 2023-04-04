@@ -15,6 +15,10 @@ abstract class RequestsService {
     String department,
     String media,
   );
+  Future<ApiResponse> updateRequestStatus(
+    String requestId,
+    String status,
+  );
 }
 
 class ApiResponse {

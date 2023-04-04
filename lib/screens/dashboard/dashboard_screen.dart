@@ -421,7 +421,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    data.title!,
+                    '${data.userId!.fullName!} sent a request',
                     style: GoogleFonts.poppins(
                       color: const Color(0xff000303),
                       fontSize: 13,

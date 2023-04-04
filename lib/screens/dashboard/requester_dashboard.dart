@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants/app_colors.dart';
-import '../../model/request_model.dart';
+import '../../model/u_request_model.dart';
 import '../../providers/profile_provider.dart';
 import 'approval/request_details_screen.dart';
 
@@ -98,9 +98,10 @@ class _RequesterDashBoardState extends State<RequesterDashBoard> {
                   ),
                 ],
               ),
-              FutureBuilder<RequestModel>(
+              FutureBuilder<URequestModel>(
                 future: req.getSpecificRequest(),
                 builder: (context, snapshot) {
+                  print(snapshot.data?.data.length);
                   if (snapshot.hasData) {
                     return Expanded(
                       child: TabBarView(
@@ -118,7 +119,7 @@ class _RequesterDashBoardState extends State<RequesterDashBoard> {
                                       .where((element) => element.status == 'Approved')
                                       .toList()
                                       .length, (index) {
-                            List<Datum> approved = snapshot.data!.data
+                            List<Dara> approved = snapshot.data!.data
                                 .where((element) => element.status == 'Approved')
                                 .toList()
                                 .reversed
@@ -131,7 +132,7 @@ class _RequesterDashBoardState extends State<RequesterDashBoard> {
                                       .where((element) => element.status == 'Declined')
                                       .toList()
                                       .length, (index) {
-                            List<Datum> declined = snapshot.data!.data
+                            List<Dara> declined = snapshot.data!.data
                                 .where((element) => element.status == 'Declined')
                                 .toList()
                                 .reversed
@@ -161,7 +162,7 @@ class _RequesterDashBoardState extends State<RequesterDashBoard> {
     );
   }
 
-  Widget activityCards(Datum data) {
+  Widget activityCards(Dara data) {
     return Container(
       height: 120,
       margin: const EdgeInsets.fromLTRB(15, 10, 15, 10),
@@ -222,7 +223,7 @@ class _RequesterDashBoardState extends State<RequesterDashBoard> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => RequestDetailsScreen(
-                      data: data,
+                      dara: data,
                     ),
                   ),
                 ),

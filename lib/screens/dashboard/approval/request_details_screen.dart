@@ -1,13 +1,18 @@
 import 'package:expense_tracker/constants/app_colors.dart';
+import 'package:expense_tracker/providers/request_provider.dart';
 import 'package:expense_tracker/widgets/app_button.dart';
+import 'package:expense_tracker/widgets/success_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 import '../../../model/request_model.dart';
+import '../../../model/u_request_model.dart';
 
 class RequestDetailsScreen extends StatefulWidget {
   final Datum? data;
-  const RequestDetailsScreen({super.key, this.data});
+  final Dara? dara;
+  const RequestDetailsScreen({super.key, this.data, this.dara});
 
   @override
   State<RequestDetailsScreen> createState() => _RequestDetailsScreenState();
@@ -76,81 +81,144 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
                   ),
                   child: Column(
                     children: [
-                      listTile('Status', widget.data!.status!),
+                      listTile(
+                          'Status',
+                          (widget.data != null)
+                              ? widget.data!.status!
+                              : widget.dara!.status!),
                       const Divider(height: 0),
                       listTile(
-                          'Department', widget.data!.department?.department! ?? 'nil'),
+                          'Department',
+                          (widget.data != null)
+                              ? widget.data!.department!.department!
+                              : widget.dara!.department!.department!),
                       const Divider(height: 0),
-                      listTile('Category', 'nil'),
+                      listTile(
+                          'Category',
+                          (widget.data != null)
+                              ? widget.data!.category!.name!
+                              : widget.dara!.category!.name!),
                       const Divider(height: 0),
-                      listTile('Amount', '₦ ${widget.data!.amount}'),
+                      listTile(
+                          'Amount',
+                          (widget.dara != null)
+                              ? '₦ ${widget.dara!.amount}'
+                              : '₦ ${widget.data!.amount}'),
                       const Divider(),
-                      listTile2('Description', widget.data!.description!),
+                      listTile2(
+                          'Description',
+                          (widget.dara != null)
+                              ? widget.dara!.description!
+                              : widget.data!.description!),
                       const Divider(),
                       listTile2(
                         'Media',
                         '',
-                        subtitleWidget: (widget.data!.media == null)
-                            ? null
-                            : InkWell(
-                                onTap: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        content: Image.network(widget.data!.media!),
+                        subtitleWidget: (widget.dara != null)
+                            ? (widget.dara!.media == null)
+                                ? null
+                                : InkWell(
+                                    onTap: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            content: Image.network(widget.dara!.media!),
+                                          );
+                                        },
                                       );
                                     },
-                                  );
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 5, vertical: 2),
-                                  decoration: BoxDecoration(
-                                    color: AppColors.greyColor,
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Row(
-                                      children: [
-                                        const Icon(
-                                          Icons.image,
-                                          color: Colors.white,
-                                          size: 20,
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 5, vertical: 2),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.greyColor,
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          children: [
+                                            const Icon(
+                                              Icons.image,
+                                              color: Colors.white,
+                                              size: 20,
+                                            ),
+                                            const SizedBox(width: 10),
+                                            Text(
+                                              'Screenshot.png',
+                                              style: GoogleFonts.poppins(
+                                                color: Colors.white,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                        const SizedBox(width: 10),
-                                        Text(
-                                          'Screenshot.png',
-                                          style: GoogleFonts.poppins(
-                                            color: Colors.white,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w500,
-                                          ),
+                                      ),
+                                    ),
+                                  )
+                            : (widget.data!.media == null)
+                                ? null
+                                : InkWell(
+                                    onTap: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            content: Image.network(widget.data!.media!),
+                                          );
+                                        },
+                                      );
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 5, vertical: 2),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.greyColor,
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          children: [
+                                            const Icon(
+                                              Icons.image,
+                                              color: Colors.white,
+                                              size: 20,
+                                            ),
+                                            const SizedBox(width: 10),
+                                            Text(
+                                              'Screenshot.png',
+                                              style: GoogleFonts.poppins(
+                                                color: Colors.white,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      ],
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ),
                       ),
                       const Divider(),
                       listTile(
                           'Account Name',
-                          (widget.data!.userAccount == null)
-                              ? ''
+                          (widget.data == null)
+                              ? widget.dara!.userAccount!.accountName!
                               : widget.data!.userAccount!.accountName!),
                       const Divider(height: 0),
                       listTile(
                           'Account Number',
-                          (widget.data!.userAccount == null)
-                              ? ''
+                          (widget.data == null)
+                              ? widget.dara!.userAccount!.accountNumber!
                               : widget.data!.userAccount!.accountNumber!),
                       const Divider(height: 0),
                       listTile(
                           'Bank',
-                          (widget.data!.userAccount == null)
-                              ? ''
+                          (widget.data == null)
+                              ? widget.dara!.userAccount!.bankName!
                               : widget.data!.userAccount!.bankName!),
                     ],
                   ),
@@ -222,7 +290,7 @@ class _PendingRequestScreenState extends State<PendingRequestScreen> {
               Image.asset('assets/profile-pic.png', height: 100),
               const SizedBox(height: 5),
               Text(
-                'Mary Jane',
+                widget.data!.userId!.fullName!,
                 style: GoogleFonts.poppins(
                   color: AppColors.blueColor,
                   fontSize: 18,
@@ -265,7 +333,7 @@ class _PendingRequestScreenState extends State<PendingRequestScreen> {
                       listTile(
                           'Department', widget.data!.department?.department! ?? 'nil'),
                       const Divider(height: 0),
-                      listTile('Category', 'nil'),
+                      listTile('Category', widget.data!.category?.name! ?? 'nil'),
                       const Divider(height: 0),
                       listTile('Amount', '₦ ${widget.data!.amount}'),
                       const Divider(),
@@ -346,23 +414,41 @@ class _PendingRequestScreenState extends State<PendingRequestScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    AppButton(
-                      text: 'Decline',
-                      onPressed: () {},
-                      width: size.width * 0.4,
-                      height: 50,
-                      color: AppColors.background,
-                      textColor: const Color(0xff000303),
-                      borderColor: AppColors.greyColor,
+                    Consumer<RequestProvider>(
+                      builder: (context, value, child) {
+                        return AppButton(
+                          text: 'Decline',
+                          onPressed: () async {
+                            value.updateStatus(widget.data!.id!, 'Declined');
+
+                            Navigator.push(context, MaterialPageRoute(builder: (context) {
+                              return const LoadScreen();
+                            }));
+                          },
+                          width: size.width * 0.4,
+                          height: 50,
+                          color: AppColors.background,
+                          textColor: const Color(0xff000303),
+                          borderColor: AppColors.greyColor,
+                        );
+                      },
                     ),
-                    AppButton(
-                      text: 'Approve',
-                      width: size.width * 0.4,
-                      height: 50,
-                      onPressed: () {},
-                      color: AppColors.blueColor,
-                      textColor: Colors.white,
-                    ),
+                    Consumer<RequestProvider>(builder: (context, value, _) {
+                      return AppButton(
+                        text: 'Approve',
+                        width: size.width * 0.4,
+                        height: 50,
+                        onPressed: () async {
+                          value.updateStatus(widget.data!.id!, 'Approved');
+
+                          Navigator.push(context, MaterialPageRoute(builder: (context) {
+                            return const LoadScreen();
+                          }));
+                        },
+                        color: AppColors.blueColor,
+                        textColor: Colors.white,
+                      );
+                    })
                   ],
                 ),
               ),

@@ -1,6 +1,7 @@
 import 'package:expense_tracker/model/request_model.dart';
 import 'package:flutter/material.dart';
 
+import '../model/u_request_model.dart';
 import '../services/api_service.dart';
 import '../services/service_locator.dart';
 
@@ -19,12 +20,14 @@ class RequestProvider extends ChangeNotifier {
   final _requestService = serviceLocator<RequestsService>();
 
   RequestModel? _requestModel;
+  URequestModel? _uRequestModel;
   RequestState _requestState = RequestState.initial;
   String _errorMessage = '';
 
   RequestState get requestState => _requestState;
   String get errorMessage => _errorMessage;
   RequestModel? get requestModel => _requestModel;
+  URequestModel? get uRequestModel => _uRequestModel;
 
   void setRequestState(RequestState requestState) {
     _requestState = requestState;
@@ -58,20 +61,20 @@ class RequestProvider extends ChangeNotifier {
     }
   }
 
-  Future<RequestModel> getSpecificRequest() async {
-    var response = await _requestService.getUserRequests();
+  Future<URequestModel> getSpecificRequest() async {
+    var response = await _requestService.getSpecificRequest();
     if (response.isError) {
       setErrorMessage(response.errorMessage!);
       setRequestState(RequestState.error);
-      return RequestModel(
+      return URequestModel(
         data: [],
         msg: '',
         success: false,
       );
     } else {
-      _requestModel = RequestModel.fromJson(response.data);
+      _uRequestModel = URequestModel.fromJson(response.data);
       setRequestState(RequestState.success);
-      return _requestModel!;
+      return _uRequestModel!;
     }
   }
 
@@ -113,6 +116,17 @@ class RequestProvider extends ChangeNotifier {
       categor.clear();
       departmen.clear();
       media.clear();
+    }
+  }
+
+  Future<void> updateStatus(String requestId, String status) async {
+    setRequestState(RequestState.loading);
+    var res = await _requestService.updateRequestStatus(requestId, status);
+    if (res.isError == true) {
+      setErrorMessage(res.errorMessage.toString());
+      setRequestState(RequestState.error);
+    } else {
+      setRequestState(RequestState.success);
     }
   }
 }

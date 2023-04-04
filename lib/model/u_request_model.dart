@@ -1,5 +1,5 @@
-class RequestModel {
-  RequestModel({
+class URequestModel {
+  URequestModel({
     required this.success,
     required this.msg,
     required this.data,
@@ -7,15 +7,15 @@ class RequestModel {
 
   final bool? success;
   final String? msg;
-  final List<Datum> data;
+  final List<Dara> data;
 
-  factory RequestModel.fromJson(Map<String, dynamic> json) {
-    return RequestModel(
+  factory URequestModel.fromJson(Map<String, dynamic> json) {
+    return URequestModel(
       success: json["success"],
       msg: json["msg"],
       data: json["data"] == null
           ? []
-          : List<Datum>.from(json["data"]!.map((x) => Datum.fromJson(x))),
+          : List<Dara>.from(json["data"]!.map((x) => Dara.fromJson(x))),
     );
   }
 
@@ -26,14 +26,16 @@ class RequestModel {
       };
 }
 
-class Datum {
-  Datum({
+class Dara {
+  Dara({
+    required this.disbursed,
     required this.id,
     required this.title,
     required this.amount,
     required this.description,
     required this.department,
     required this.category,
+    required this.media,
     required this.status,
     required this.userId,
     required this.userAccount,
@@ -42,27 +44,28 @@ class Datum {
     required this.updatedAt,
     required this.approver,
     required this.approverId,
-    required this.media,
   });
 
+  final String? disbursed;
   final String? id;
   final String? title;
   final num? amount;
   final String? description;
   final Department? department;
   final Category? category;
+  final String? media;
   final String? status;
-  final UserId? userId;
+  final ErId? userId;
   final UserAccount? userAccount;
   final String? companyId;
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final String? approver;
-  final UserId? approverId;
-  final String? media;
+  final ErId? approverId;
 
-  factory Datum.fromJson(Map<String, dynamic> json) {
-    return Datum(
+  factory Dara.fromJson(Map<String, dynamic> json) {
+    return Dara(
+      disbursed: json["disbursed"],
       id: json["_id"],
       title: json["title"],
       amount: json["amount"],
@@ -70,26 +73,28 @@ class Datum {
       department:
           json["department"] == null ? null : Department.fromJson(json["department"]),
       category: json["category"] == null ? null : Category.fromJson(json["category"]),
+      media: json["media"],
       status: json["status"],
-      userId: json["userId"] == null ? null : UserId.fromJson(json["userId"]),
+      userId: json["userId"] == null ? null : ErId.fromJson(json["userId"]),
       userAccount:
           json["userAccount"] == null ? null : UserAccount.fromJson(json["userAccount"]),
       companyId: json["companyId"],
       createdAt: DateTime.tryParse(json["createdAt"] ?? ""),
       updatedAt: DateTime.tryParse(json["updatedAt"] ?? ""),
       approver: json["approver"],
-      approverId: json["approverId"] == null ? null : UserId.fromJson(json["approverId"]),
-      media: json["media"],
+      approverId: json["approverId"] == null ? null : ErId.fromJson(json["approverId"]),
     );
   }
 
   Map<String, dynamic> toJson() => {
+        "disbursed": disbursed,
         "_id": id,
         "title": title,
         "amount": amount,
         "description": description,
         "department": department?.toJson(),
         "category": category?.toJson(),
+        "media": media,
         "status": status,
         "userId": userId?.toJson(),
         "userAccount": userAccount?.toJson(),
@@ -98,12 +103,11 @@ class Datum {
         "updatedAt": updatedAt?.toIso8601String(),
         "approver": approver,
         "approverId": approverId?.toJson(),
-        "media": media,
       };
 }
 
-class UserId {
-  UserId({
+class ErId {
+  ErId({
     required this.id,
     required this.fullName,
   });
@@ -111,8 +115,8 @@ class UserId {
   final String? id;
   final String? fullName;
 
-  factory UserId.fromJson(Map<String, dynamic> json) {
-    return UserId(
+  factory ErId.fromJson(Map<String, dynamic> json) {
+    return ErId(
       id: json["_id"],
       fullName: json["fullName"],
     );
@@ -134,7 +138,10 @@ class Category {
   final String? name;
 
   factory Category.fromJson(Map<String, dynamic> json) {
-    return Category(id: json["_id"], name: json["name"]);
+    return Category(
+      id: json["_id"],
+      name: json["name"],
+    );
   }
 
   Map<String, dynamic> toJson() => {

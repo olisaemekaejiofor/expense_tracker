@@ -2,6 +2,8 @@ import 'package:expense_tracker/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../widgets/bottom_sheet_button.dart';
+
 class AlertScreen extends StatefulWidget {
   const AlertScreen({super.key});
 
@@ -10,6 +12,22 @@ class AlertScreen extends StatefulWidget {
 }
 
 class _AlertScreenState extends State<AlertScreen> {
+  void showCustomBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return CustomBottomSheet(
+          child: Container(
+            color: Colors.white,
+            child: Center(
+              child: Text('This is a custom bottom sheet'),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -59,11 +77,23 @@ class _AlertScreenState extends State<AlertScreen> {
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
                   children: [
-                    alertCards(),
+                    alertCards(
+                      () {
+                        showCustomBottomSheet(context);
+                      },
+                    ),
                     const SizedBox(height: 10),
-                    alertCards(),
+                    alertCards(
+                      () {
+                        showCustomBottomSheet(context);
+                      },
+                    ),
                     const SizedBox(height: 10),
-                    alertCards(),
+                    alertCards(
+                      () {
+                        showCustomBottomSheet(context);
+                      },
+                    ),
                   ],
                 ),
               ),
@@ -74,42 +104,45 @@ class _AlertScreenState extends State<AlertScreen> {
     );
   }
 
-  Widget alertCards() {
-    return Container(
-      width: double.infinity,
-      height: 85,
-      decoration: BoxDecoration(
-        color: AppColors.background,
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: AppColors.greyColor, width: 0.5),
-      ),
-      child: Center(
-        child: ListTile(
-          leading: const CircleAvatar(
-            backgroundColor: AppColors.blueColor,
-            radius: 30,
-            child: Icon(Icons.check, color: Colors.white),
-          ),
-          title: Text(
-            'Request Approved',
-            style: GoogleFonts.poppins(
-              color: Colors.black,
-              fontSize: 15,
-              fontWeight: FontWeight.w500,
+  Widget alertCards(VoidCallback onTap) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        height: 85,
+        decoration: BoxDecoration(
+          color: AppColors.background,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: AppColors.greyColor, width: 0.5),
+        ),
+        child: Center(
+          child: ListTile(
+            leading: const CircleAvatar(
+              backgroundColor: AppColors.blueColor,
+              radius: 30,
+              child: Icon(Icons.check, color: Colors.white),
             ),
-          ),
-          subtitle: Text(
-            'Felix sent N10,000',
-            style: GoogleFonts.poppins(
-              color: Colors.black,
-              fontSize: 12,
-              fontWeight: FontWeight.w400,
+            title: Text(
+              'Request Approved',
+              style: GoogleFonts.poppins(
+                color: Colors.black,
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+              ),
             ),
-          ),
-          trailing: const Icon(
-            Icons.arrow_forward_ios,
-            color: AppColors.greyColor,
-            size: 20,
+            subtitle: Text(
+              'Felix sent N10,000',
+              style: GoogleFonts.poppins(
+                color: Colors.black,
+                fontSize: 12,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            trailing: const Icon(
+              Icons.arrow_forward_ios,
+              color: AppColors.greyColor,
+              size: 20,
+            ),
           ),
         ),
       ),
