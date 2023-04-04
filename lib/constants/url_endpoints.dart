@@ -7,4 +7,5 @@ class UrlEndpoints {
   static const String createRequest = '${baseUrl}request/create';
   static const String getCategory = '${baseUrl}category';
   static const String getDepartment = '${baseUrl}department';
+  static const String getNotifications = '${baseUrl}notification';
 }

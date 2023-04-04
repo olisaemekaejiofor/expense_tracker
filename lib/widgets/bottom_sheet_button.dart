@@ -13,7 +13,8 @@ class CustomBottomSheet extends StatefulWidget {
 class _CustomBottomSheetState extends State<CustomBottomSheet> {
   @override
   Widget build(BuildContext context) {
-    return Container(height: 200, child: widget.child // Add your content here
-        );
+    return SizedBox(
+      height: 200, child: widget.child, // Add your content here
+    );
   }
 }

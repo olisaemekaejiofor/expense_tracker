@@ -1,6 +1,9 @@
 import 'package:expense_tracker/constants/app_colors.dart';
+import 'package:expense_tracker/model/notification_model.dart';
+import 'package:expense_tracker/providers/notification_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 import '../../../widgets/bottom_sheet_button.dart';
 
@@ -19,7 +22,7 @@ class _AlertScreenState extends State<AlertScreen> {
         return CustomBottomSheet(
           child: Container(
             color: Colors.white,
-            child: Center(
+            child: const Center(
               child: Text('This is a custom bottom sheet'),
             ),
           ),
@@ -30,6 +33,7 @@ class _AlertScreenState extends State<AlertScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final notification = context.read<NotificationProvider>();
     final Size size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
@@ -72,39 +76,36 @@ class _AlertScreenState extends State<AlertScreen> {
               ),
             ),
             Expanded(
-                child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  children: [
-                    alertCards(
-                      () {
-                        showCustomBottomSheet(context);
+              child: FutureBuilder<NotificationModel>(
+                future: notification.getNotifications(),
+                builder: ((context, snapshot) {
+                  if (snapshot.hasData) {
+                    return ListView.builder(
+                      itemCount: snapshot.data!.data.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: alertCards(
+                              data: snapshot.data!.data[index],
+                              onTap: () {
+                                // showCustomBottomSheet(context);
+                              }),
+                        );
                       },
-                    ),
-                    const SizedBox(height: 10),
-                    alertCards(
-                      () {
-                        showCustomBottomSheet(context);
-                      },
-                    ),
-                    const SizedBox(height: 10),
-                    alertCards(
-                      () {
-                        showCustomBottomSheet(context);
-                      },
-                    ),
-                  ],
-                ),
+                    );
+                  } else {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                }),
               ),
-            ))
+            )
           ],
         ),
       ),
     );
   }
 
-  Widget alertCards(VoidCallback onTap) {
+  Widget alertCards({Datum? data, VoidCallback? onTap}) {
     return InkWell(
       onTap: onTap,
       child: Container(
@@ -117,13 +118,26 @@ class _AlertScreenState extends State<AlertScreen> {
         ),
         child: Center(
           child: ListTile(
-            leading: const CircleAvatar(
-              backgroundColor: AppColors.blueColor,
-              radius: 30,
-              child: Icon(Icons.check, color: Colors.white),
-            ),
+            leading: (data!.title == 'Requistion')
+                ? const CircleAvatar(
+                    backgroundColor: Color(0xffDFA606),
+                    radius: 30,
+                    child: Icon(Icons.message, color: Colors.white),
+                  )
+                : (data.title == 'Requisition Status Update' &&
+                        data.message!.split(' ')[6] == 'declined')
+                    ? const CircleAvatar(
+                        backgroundColor: Color(0xffCC6951),
+                        radius: 30,
+                        child: Icon(Icons.cancel, color: Colors.white),
+                      )
+                    : const CircleAvatar(
+                        backgroundColor: AppColors.blueColor,
+                        radius: 30,
+                        child: Icon(Icons.check, color: Colors.white),
+                      ),
             title: Text(
-              'Request Approved',
+              data.title!,
               style: GoogleFonts.poppins(
                 color: Colors.black,
                 fontSize: 15,
@@ -131,7 +145,7 @@ class _AlertScreenState extends State<AlertScreen> {
               ),
             ),
             subtitle: Text(
-              'Felix sent N10,000',
+              data.message!,
               style: GoogleFonts.poppins(
                 color: Colors.black,
                 fontSize: 12,

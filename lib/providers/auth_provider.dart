@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:expense_tracker/model/dashboard_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -52,8 +53,28 @@ class AuthProvider extends ChangeNotifier {
       _storage.write(key: 'fullName', value: response.data['data']['user']['fullName']);
       _storage.write(key: 'email', value: response.data['data']['user']['email']);
       _storage.write(key: 'role', value: response.data['data']['user']['role']);
+      _storage.write(
+          key: 'department', value: response.data['data']['user']['department']);
       setRole(response.data['data']['user']['role']);
       setAuthState(AuthState.success);
+    }
+  }
+
+  Future<DashboardModel> getDashboard() async {
+    setAuthState(AuthState.loading);
+    var response = await _authService.getDashboard();
+    if (response.isError) {
+      log(response.errorMessage!);
+      setErrorMessage(response.errorMessage!);
+      setAuthState(AuthState.error);
+      return DashboardModel(
+        data: [],
+        msg: '',
+        success: false,
+      );
+    } else {
+      setAuthState(AuthState.success);
+      return DashboardModel.fromJson(response.data);
     }
   }
 }

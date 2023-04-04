@@ -10,7 +10,8 @@ class RequestsImpl implements RequestsService {
   @override
   Future<ApiResponse> getUserRequests() async {
     String? token = await _storage.read(key: 'token');
-    final url = Uri.parse(UrlEndpoints.getUserRequests);
+    String? department = await _storage.read(key: 'department');
+    final url = Uri.parse('${UrlEndpoints.getUserRequests}?department=$department');
     Map<String, String> headers = {
       "Authorization": "Bearer $token",
       "Content-Type": "application/json",
@@ -150,7 +151,7 @@ class RequestsImpl implements RequestsService {
   Future<ApiResponse> getSpecificRequest() async {
     String? token = await _storage.read(key: 'token');
     String? uid = await _storage.read(key: 'id');
-    print(uid);
+    // print(uid);
     final url = Uri.parse('${UrlEndpoints.getUserRequests}?userId=$uid');
     Map<String, String> headers = {
       "Authorization": "Bearer $token",
@@ -194,6 +195,40 @@ class RequestsImpl implements RequestsService {
     };
     try {
       final res = await http.put(url, headers: headers, body: jsonEncode(body));
+      final json = jsonDecode(res.body);
+      switch (res.statusCode) {
+        case 200:
+          return ApiResponse(statusCode: 200, data: json, isError: false);
+        default:
+          return ApiResponse(
+            statusCode: res.statusCode,
+            data: json,
+            isError: true,
+            errorMessage: json['message'],
+          );
+      }
+    } catch (e) {
+      return ApiResponse(
+        statusCode: 500,
+        data: null,
+        isError: true,
+        errorMessage: e.toString(),
+      );
+    }
+  }
+
+  @override
+  Future<ApiResponse> getAccounts() async {
+    String? token = await _storage.read(key: 'token');
+    // String? uid = await _storage.read(key: 'id');
+    // print(uid);
+    final url = Uri.parse('${UrlEndpoints.baseUrl}account');
+    Map<String, String> headers = {
+      "Authorization": "Bearer $token",
+      "Content-Type": "application/json",
+    };
+    try {
+      final res = await http.get(url, headers: headers);
       final json = jsonDecode(res.body);
       switch (res.statusCode) {
         case 200:

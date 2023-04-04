@@ -1,5 +1,6 @@
 abstract class AuthService {
   Future<ApiResponse> login(String email, String password);
+  Future<ApiResponse> getDashboard();
 }
 
 abstract class RequestsService {
@@ -19,6 +20,12 @@ abstract class RequestsService {
     String requestId,
     String status,
   );
+
+  Future<ApiResponse> getAccounts();
+}
+
+abstract class NotificationService {
+  Future<ApiResponse> getNotifications();
 }
 
 class ApiResponse {

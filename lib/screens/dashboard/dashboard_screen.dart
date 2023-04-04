@@ -1,3 +1,4 @@
+import 'package:expense_tracker/model/dashboard_model.dart';
 import 'package:expense_tracker/model/request_model.dart';
 import 'package:expense_tracker/providers/profile_provider.dart';
 import 'package:expense_tracker/providers/request_provider.dart';
@@ -11,6 +12,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants/app_colors.dart';
+import '../../providers/auth_provider.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -23,6 +25,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     final prof = context.read<ProfileProvider>();
+    final auth = context.read<AuthProvider>();
     final request = context.read<RequestProvider>();
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
@@ -46,115 +49,233 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     color: AppColors.blueColor,
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 15),
-                        Row(
-                          children: [
-                            Text(
-                              'Welcome, ${prof.profileModel?.fullName}',
-                              style: GoogleFonts.poppins(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                            const Spacer(),
-                            InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const AlertScreen(),
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+                      child: FutureBuilder<DashboardModel>(
+                        future: auth.getDashboard(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SizedBox(height: 15),
+                                Row(
+                                  children: [
+                                    Text(
+                                      'Welcome, ${prof.profileModel?.fullName}',
+                                      style: GoogleFonts.poppins(
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    const Spacer(),
+                                    InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => const AlertScreen(),
+                                          ),
+                                        );
+                                      },
+                                      child: CircleAvatar(
+                                        radius: 20,
+                                        backgroundColor: Colors.white.withOpacity(0.1),
+                                        child: SvgPicture.asset(
+                                          'assets/notification.svg',
+                                          height: 20,
+                                          width: 20,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 15),
+                                Text(
+                                  'Available Balance',
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w200,
                                   ),
-                                );
-                              },
-                              child: CircleAvatar(
-                                radius: 20,
-                                backgroundColor: Colors.white.withOpacity(0.1),
-                                child: SvgPicture.asset(
-                                  'assets/notification.svg',
-                                  height: 20,
-                                  width: 20,
                                 ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 15),
-                        Text(
-                          'Available Balance',
-                          style: GoogleFonts.poppins(
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w200,
-                          ),
-                        ),
-                        const SizedBox(height: 5),
-                        Text(
-                          '₦ 0.00',
-                          style: GoogleFonts.poppins(
-                            color: Colors.white,
-                            fontSize: 30,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        const SizedBox(height: 15),
-                        Row(
-                          children: [
-                            Text(
-                              'Spending Limits',
-                              style: GoogleFonts.poppins(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w300,
-                              ),
-                            ),
-                            const Spacer(),
-                            Text(
-                              '0%',
-                              style: GoogleFonts.poppins(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w300,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 5),
-                        const SizedBox(height: 5),
-                        LinearProgressIndicator(
-                          value: 0.0,
-                          minHeight: 10,
-                          backgroundColor: Colors.white.withOpacity(0.1),
-                          valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
-                        ),
-                        const SizedBox(height: 5),
-                        RichText(
-                          text: TextSpan(
-                            text: '₦ 0.00',
-                            style: GoogleFonts.poppins(
-                              color: AppColors.orangeColor,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            children: [
-                              TextSpan(
-                                text: ' Spent of 0.00',
-                                style: GoogleFonts.poppins(
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
+                                const SizedBox(height: 5),
+                                Text(
+                                  '₦ ${snapshot.data!.data[0].amountSpent! - snapshot.data!.data[0].spendingLimit!}',
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.white,
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
+                                const SizedBox(height: 15),
+                                Row(
+                                  children: [
+                                    Text(
+                                      'Spending Limits',
+                                      style: GoogleFonts.poppins(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w300,
+                                      ),
+                                    ),
+                                    const Spacer(),
+                                    Text(
+                                      '${((snapshot.data!.data[0].spendingLimit! / snapshot.data!.data[0].amountSpent!) * 100).toStringAsFixed(1)}%',
+                                      style: GoogleFonts.poppins(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w300,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 5),
+                                const SizedBox(height: 5),
+                                LinearProgressIndicator(
+                                  value: (((snapshot.data!.data[0].spendingLimit! /
+                                      snapshot.data!.data[0].amountSpent!))),
+                                  minHeight: 10,
+                                  backgroundColor: Colors.white.withOpacity(0.1),
+                                  valueColor:
+                                      const AlwaysStoppedAnimation<Color>(Colors.white),
+                                ),
+                                const SizedBox(height: 5),
+                                RichText(
+                                  text: TextSpan(
+                                    text: '₦ ${snapshot.data!.data[0].spendingLimit} ',
+                                    style: GoogleFonts.poppins(
+                                      color: AppColors.orangeColor,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    children: [
+                                      TextSpan(
+                                        text:
+                                            ' Spent of ₦ ${snapshot.data!.data[0].amountSpent}',
+                                        style: GoogleFonts.poppins(
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            );
+                          } else {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SizedBox(height: 15),
+                                Row(
+                                  children: [
+                                    Text(
+                                      'Welcome, ${prof.profileModel?.fullName}',
+                                      style: GoogleFonts.poppins(
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    const Spacer(),
+                                    InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => const AlertScreen(),
+                                          ),
+                                        );
+                                      },
+                                      child: CircleAvatar(
+                                        radius: 20,
+                                        backgroundColor: Colors.white.withOpacity(0.1),
+                                        child: SvgPicture.asset(
+                                          'assets/notification.svg',
+                                          height: 20,
+                                          width: 20,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 15),
+                                Text(
+                                  'Available Balance',
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w200,
+                                  ),
+                                ),
+                                const SizedBox(height: 5),
+                                Text(
+                                  '₦ 0.00',
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.white,
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                const SizedBox(height: 15),
+                                Row(
+                                  children: [
+                                    Text(
+                                      'Spending Limits',
+                                      style: GoogleFonts.poppins(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w300,
+                                      ),
+                                    ),
+                                    const Spacer(),
+                                    Text(
+                                      '0%',
+                                      style: GoogleFonts.poppins(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w300,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 5),
+                                const SizedBox(height: 5),
+                                LinearProgressIndicator(
+                                  value: 0.0,
+                                  minHeight: 10,
+                                  backgroundColor: Colors.white.withOpacity(0.1),
+                                  valueColor:
+                                      const AlwaysStoppedAnimation<Color>(Colors.white),
+                                ),
+                                const SizedBox(height: 5),
+                                RichText(
+                                  text: TextSpan(
+                                    text: '₦ 0.00',
+                                    style: GoogleFonts.poppins(
+                                      color: AppColors.orangeColor,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    children: [
+                                      TextSpan(
+                                        text: ' Spent of 0.00',
+                                        style: GoogleFonts.poppins(
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            );
+                          }
+                        },
+                      )),
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.end,
