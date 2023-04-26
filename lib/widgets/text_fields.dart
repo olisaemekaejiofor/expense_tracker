@@ -84,28 +84,28 @@ class _NormalTextFeildState extends State<NormalTextFeild> {
       controller: widget.controller,
       decoration: InputDecoration(
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(20),
           borderSide: validate == true
               ? const BorderSide(color: Colors.red, width: 1)
               : BorderSide.none,
         ),
         enabledBorder: OutlineInputBorder(
           gapPadding: 0,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(20),
           borderSide: widget.controller.text.isEmpty
               ? BorderSide.none
               : const BorderSide(color: AppColors.greyColor, width: 1),
         ),
         disabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(20),
           borderSide: BorderSide.none,
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(20),
           borderSide: const BorderSide(color: Colors.red),
         ),
         // icon: const Icon(Icons.calendar_today),
-        fillColor: AppColors.greyColor,
+        fillColor: const Color(0xffEEEEEE),
         filled: true,
         hintText: 'Type your message here',
         // hintStyle: style(FontWeight.w600, 16, textColorGrey),

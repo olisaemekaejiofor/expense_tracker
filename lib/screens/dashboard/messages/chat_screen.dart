@@ -1,4 +1,5 @@
 import 'package:expense_tracker/model/request_model.dart';
+import 'package:expense_tracker/widgets/text_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_bubble/chat_bubble.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -36,54 +37,85 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                   color: AppColors.mainColor,
                 ),
-                child: SizedBox(
-                  child: ListTile(
-                    leading: IconButton(
-                      onPressed: () => Navigator.pop(context),
-                      icon: const Icon(Icons.arrow_back),
-                      color: Colors.white,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: 50,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Icon(
+                              Icons.arrow_back,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    title: Row(
+                    const SizedBox(width: 20),
+                    CircleAvatar(
+                      radius: 25,
+                      backgroundColor: Colors.white,
+                      child: Text(
+                        widget.id.fullName!.split('').toList()[0],
+                        style: GoogleFonts.poppins(
+                          color: AppColors.blueColor,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CircleAvatar(
-                          backgroundColor: Colors.white,
-                          radius: 23,
-                          child: Text(
-                            widget.id.fullName!.split('').toList()[0],
-                            style: GoogleFonts.poppins(
-                              color: AppColors.blueColor,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 24,
-                            ),
+                        Text(
+                          '${widget.id.fullName}',
+                          style: GoogleFonts.poppins(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
-                        const SizedBox(width: 10),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              widget.id.fullName!,
-                              style: GoogleFonts.poppins(color: Colors.white),
-                            ),
-                            Text(
-                              'Online',
-                              style: GoogleFonts.poppins(color: Colors.white),
-                            ),
-                          ],
+                        Text(
+                          'Online',
+                          style: GoogleFonts.poppins(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w300,
+                          ),
                         ),
                       ],
                     ),
-                  ),
+                    const Spacer(),
+                    SizedBox(
+                      height: 50,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Icon(
+                            Icons.more_vert,
+                            color: Colors.white,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
               Positioned(
                 top: 110,
                 child: Container(
                   width: size.width,
-                  height: size.height,
+                  height: size.height * 0.87,
+                  padding: const EdgeInsets.all(20),
                   decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
@@ -108,45 +140,75 @@ class _ChatScreenState extends State<ChatScreen> {
                                   cacheExtent: 1000,
                                   itemBuilder: (context, index) {
                                     return (index.isOdd)
-                                        ? ChatBubble(
-                                            clipper: ChatBubbleClipper5(
-                                                type: BubbleType.receiverBubble),
-                                            alignment: Alignment.topLeft,
-                                            margin:
-                                                const EdgeInsets.only(top: 5, bottom: 5),
-                                            backGroundColor: const Color(0xffE7E7ED),
-                                            child: Container(
-                                              constraints: const BoxConstraints(
-                                                maxWidth: 200,
-                                              ),
-                                              child: Text(
-                                                'Hello',
-                                                style: GoogleFonts.poppins(
-                                                  color: Colors.black,
-                                                  fontSize: 16,
+                                        ? Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              ChatBubble(
+                                                clipper: ChatBubbleClipper5(
+                                                    type: BubbleType.receiverBubble),
+                                                alignment: Alignment.topLeft,
+                                                margin: const EdgeInsets.only(
+                                                    top: 10, bottom: 10),
+                                                backGroundColor: const Color(0xffD2D1D2),
+                                                child: Container(
+                                                  constraints: const BoxConstraints(
+                                                    maxWidth: 200,
+                                                  ),
+                                                  child: Text(
+                                                    'lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor ',
+                                                    style: GoogleFonts.poppins(
+                                                      color: Colors.black,
+                                                      fontSize: 13,
+                                                      fontWeight: FontWeight.w300,
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
-                                            ),
+                                              Text(
+                                                '6:55 AM',
+                                                style: GoogleFonts.poppins(
+                                                  color: const Color(0xff727272),
+                                                  fontSize: 13,
+                                                  fontWeight: FontWeight.w300,
+                                                ),
+                                              ),
+                                              const SizedBox(height: 10),
+                                            ],
                                           )
-                                        : ChatBubble(
-                                            clipper: ChatBubbleClipper5(
-                                                type: BubbleType.sendBubble),
-                                            alignment: Alignment.topRight,
-                                            margin:
-                                                const EdgeInsets.only(top: 5, bottom: 5),
-                                            backGroundColor: const Color(0xffFCF4D2),
-                                            child: Container(
-                                              constraints: const BoxConstraints(
-                                                maxWidth: 200,
-                                              ),
-                                              child: Text(
-                                                "I'm fine",
-                                                style: GoogleFonts.poppins(
-                                                  color: Colors.black,
-                                                  fontSize: 16,
+                                        : Column(
+                                            crossAxisAlignment: CrossAxisAlignment.end,
+                                            children: [
+                                              ChatBubble(
+                                                clipper: ChatBubbleClipper5(
+                                                    type: BubbleType.sendBubble),
+                                                alignment: Alignment.topRight,
+                                                margin: const EdgeInsets.only(
+                                                    top: 10, bottom: 10),
+                                                backGroundColor: const Color(0xffFCF4D2),
+                                                child: Container(
+                                                  constraints: const BoxConstraints(
+                                                    maxWidth: 200,
+                                                  ),
+                                                  child: Text(
+                                                    "lorem ipsum dolor sit amet, consectetur adipiscing elit",
+                                                    style: GoogleFonts.poppins(
+                                                      color: Colors.black,
+                                                      fontSize: 13,
+                                                      fontWeight: FontWeight.w300,
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
-                                            ),
+                                              Text(
+                                                '6:55 AM',
+                                                style: GoogleFonts.poppins(
+                                                  color: const Color(0xff727272),
+                                                  fontSize: 13,
+                                                  fontWeight: FontWeight.w300,
+                                                ),
+                                              ),
+                                              const SizedBox(height: 10),
+                                            ],
                                           );
                                   },
                                 ),
@@ -155,19 +217,21 @@ class _ChatScreenState extends State<ChatScreen> {
                           ),
                         ),
                       ),
+                      const SizedBox(height: 10),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: Row(
                           children: [
                             Expanded(
-                              child: CustomTextField(
+                              child: NormalTextFeild(
                                 controller: controller,
                               ),
                             ),
                             const SizedBox(width: 10),
                             Container(
+                              padding: const EdgeInsets.all(5),
                               decoration: BoxDecoration(
-                                color: AppColors.mainColor,
+                                color: AppColors.blueColor,
                                 borderRadius: BorderRadius.circular(30),
                               ),
                               child: IconButton(
