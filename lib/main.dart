@@ -1,3 +1,4 @@
+import 'package:expense_tracker/providers/message_provider.dart';
 import 'package:expense_tracker/providers/notification_provider.dart';
 import 'package:expense_tracker/providers/profile_provider.dart';
 import 'package:expense_tracker/providers/request_provider.dart';
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ProfileProvider()),
         ChangeNotifierProvider(create: (_) => RequestProvider()),
         ChangeNotifierProvider(create: (_) => NotificationProvider()),
+        ChangeNotifierProvider(create: (_) => MessageProvider()),
       ],
       child: MaterialApp.router(
         routerConfig: router,

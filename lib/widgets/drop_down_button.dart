@@ -1,6 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/request_provider.dart';
@@ -28,8 +29,14 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton> {
     _dropDownMenuItems = widget.items
         .map((dynamic item) => DropdownMenuItem<String>(
               value: (widget.type == 'category') ? item['_id'] : item['_id'],
-              child:
-                  Text((widget.type == 'category') ? item['name'] : item['department']),
+              child: Text(
+                (widget.type == 'category') ? item['name'] : item['department'],
+                style: GoogleFonts.poppins(
+                  color: Colors.black,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
             ))
         .toList();
     _selectedItem = widget.items[0]['_id'];
@@ -39,32 +46,35 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton> {
   Widget build(BuildContext context) {
     final req = context.read<RequestProvider>();
     final Size size = MediaQuery.of(context).size;
-    return SizedBox(
-      width: size.width * 0.42,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        decoration: BoxDecoration(
-          // color: Colors.white,
-          borderRadius: BorderRadius.circular(5),
-          border: Border.all(color: Colors.grey),
-        ),
-        child: DropdownButton<String>(
-          value: _selectedItem,
-          items: _dropDownMenuItems,
-          underline: Container(
-            height: 0,
-            color: Colors.transparent,
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      decoration: BoxDecoration(
+        // color: Colors.white,
+        borderRadius: BorderRadius.circular(5),
+        border: Border.all(color: Colors.grey),
+      ),
+      child: SizedBox(
+        width: size.width * 0.35,
+        child: ClipRect(
+          clipBehavior: Clip.antiAlias,
+          child: DropdownButton<String>(
+            value: _selectedItem,
+            items: _dropDownMenuItems,
+            underline: Container(
+              height: 0,
+              color: Colors.transparent,
+            ),
+            onChanged: (newValue) {
+              setState(() {
+                _selectedItem = newValue!;
+                if (widget.type == 'category') {
+                  req.categor.text = _selectedItem;
+                } else {
+                  req.departmen.text = _selectedItem;
+                }
+              });
+            },
           ),
-          onChanged: (newValue) {
-            setState(() {
-              _selectedItem = newValue!;
-              if (widget.type == 'category') {
-                req.categor.text = _selectedItem;
-              } else {
-                req.departmen.text = _selectedItem;
-              }
-            });
-          },
         ),
       ),
     );

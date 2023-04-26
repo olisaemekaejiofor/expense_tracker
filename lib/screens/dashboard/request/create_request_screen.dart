@@ -4,6 +4,7 @@ import 'package:expense_tracker/screens/dashboard/request/confirm_request_screen
 import 'package:expense_tracker/widgets/app_button.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -18,6 +19,11 @@ class CreateRequestScreen extends StatefulWidget {
 }
 
 class _CreateRequestScreenState extends State<CreateRequestScreen> {
+  String _selectedOption = '';
+  final List<String> options = ['Option 1'];
+  final onSelected = (String selectedOption) {
+    print('object');
+  };
   @override
   Widget build(BuildContext context) {
     final request = context.read<RequestProvider>();
@@ -97,6 +103,7 @@ class _CreateRequestScreenState extends State<CreateRequestScreen> {
                             items: request.department,
                             type: 'department',
                           ),
+                          const SizedBox(width: 10),
                           CustomDropdownButton(
                             items: request.category,
                             type: 'category',
@@ -113,6 +120,20 @@ class _CreateRequestScreenState extends State<CreateRequestScreen> {
                       largeTextField('Description', request.desc),
                       const SizedBox(height: 10),
                       dottedContainer(),
+                      const SizedBox(height: 10),
+                      //bottomSheet selector
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Account details',
+                          style: GoogleFonts.poppins(
+                            color: AppColors.blueColor,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                      bottomSheetSelector(),
                     ],
                   ),
                 ),
@@ -256,6 +277,164 @@ class _CreateRequestScreenState extends State<CreateRequestScreen> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget bottomSheetSelector() {
+    return InkWell(
+      onTap: _showBottomSheet,
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(15),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: AppColors.blueColor),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            SvgPicture.asset(
+              'assets/approval.svg',
+              color: AppColors.blueColor,
+              height: 30,
+            ),
+            const SizedBox(width: 25),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'XXX',
+                  style: GoogleFonts.poppins(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 14,
+                  ),
+                ),
+                Text(
+                  'xxxx-xxxx',
+                  style: GoogleFonts.poppins(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 12,
+                  ),
+                ),
+                Text(
+                  'xxxx xxxx',
+                  style: GoogleFonts.poppins(
+                    color: Colors.black,
+                    fontWeight: FontWeight.normal,
+                    fontSize: 11,
+                  ),
+                )
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showBottomSheet() {
+    showModalBottomSheet(
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(30),
+          topRight: Radius.circular(30),
+        ),
+      ),
+      context: context,
+      builder: (BuildContext context) {
+        return SizedBox(
+          height: MediaQuery.of(context).size.height * 0.4,
+          child: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Select Account',
+                      style: GoogleFonts.poppins(
+                        color: Colors.black54,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 20,
+                      ),
+                    ),
+                    // IconButton(
+                    //   onPressed: () {
+                    //     Navigator.pop(context);
+                    //   },
+                    //   icon: const Icon(Icons.cancel),
+                    // ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Expanded(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: 1,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: AppColors.blueColor, width: 0.5),
+                        ),
+                        child: ListTile(
+                          leading: Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: AppColors.blueColor.withOpacity(0.1),
+                              shape: BoxShape.circle,
+                            ),
+                            child: SvgPicture.asset('assets/approval.svg',
+                                color: AppColors.blueColor, height: 30),
+                          ),
+                          title: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Ochade Emmanuel',
+                                style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.mainColor,
+                                ),
+                              ),
+                              Text(
+                                '1234435267',
+                                style: GoogleFonts.poppins(
+                                  color: AppColors.mainColor,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 15,
+                                ),
+                              ),
+                              Text(
+                                'Fidelity Bank',
+                                style: GoogleFonts.poppins(
+                                  color: AppColors.mainColor,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ],
+                          ),
+                          trailing: Radio(
+                            value: 0,
+                            groupValue: 0,
+                            onChanged: (val) {},
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

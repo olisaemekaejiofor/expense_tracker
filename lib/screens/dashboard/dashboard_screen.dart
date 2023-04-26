@@ -101,8 +101,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 ),
                                 const SizedBox(height: 5),
                                 Text(
-                                  '₦ ${snapshot.data!.data[0].amountSpent! - snapshot.data!.data[0].spendingLimit!}',
-                                  style: GoogleFonts.poppins(
+                                  '₦ ${snapshot.data!.data[0].spendingLimit! - snapshot.data!.data[0].amountSpent!}',
+                                  style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 30,
                                     fontWeight: FontWeight.w600,
@@ -121,8 +121,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     ),
                                     const Spacer(),
                                     Text(
-                                      '${((snapshot.data!.data[0].spendingLimit! / snapshot.data!.data[0].amountSpent!) * 100).toStringAsFixed(1)}%',
-                                      style: GoogleFonts.poppins(
+                                      '${((snapshot.data!.data[0].amountSpent! / snapshot.data!.data[0].spendingLimit!) * 100).toStringAsFixed(1)}%',
+                                      style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 14,
                                         fontWeight: FontWeight.w300,
@@ -133,8 +133,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 const SizedBox(height: 5),
                                 const SizedBox(height: 5),
                                 LinearProgressIndicator(
-                                  value: (((snapshot.data!.data[0].spendingLimit! /
-                                      snapshot.data!.data[0].amountSpent!))),
+                                  value: (((snapshot.data!.data[0].amountSpent! /
+                                      snapshot.data!.data[0].spendingLimit!))),
                                   minHeight: 10,
                                   backgroundColor: Colors.white.withOpacity(0.1),
                                   valueColor:
@@ -143,8 +143,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 const SizedBox(height: 5),
                                 RichText(
                                   text: TextSpan(
-                                    text: '₦ ${snapshot.data!.data[0].spendingLimit} ',
-                                    style: GoogleFonts.poppins(
+                                    text: '₦ ${snapshot.data!.data[0].amountSpent} ',
+                                    style: const TextStyle(
                                       color: AppColors.orangeColor,
                                       fontSize: 14,
                                       fontWeight: FontWeight.w500,
@@ -152,8 +152,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     children: [
                                       TextSpan(
                                         text:
-                                            ' Spent of ₦ ${snapshot.data!.data[0].amountSpent}',
-                                        style: GoogleFonts.poppins(
+                                            ' Spent of ₦ ${snapshot.data!.data[0].spendingLimit}',
+                                        style: const TextStyle(
                                           color: Colors.white,
                                           fontSize: 14,
                                           fontWeight: FontWeight.w500,

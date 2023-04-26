@@ -61,19 +61,17 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<DashboardModel> getDashboard() async {
-    setAuthState(AuthState.loading);
     var response = await _authService.getDashboard();
     if (response.isError) {
       log(response.errorMessage!);
       setErrorMessage(response.errorMessage!);
-      setAuthState(AuthState.error);
+
       return DashboardModel(
         data: [],
         msg: '',
         success: false,
       );
     } else {
-      setAuthState(AuthState.success);
       return DashboardModel.fromJson(response.data);
     }
   }

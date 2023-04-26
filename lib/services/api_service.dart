@@ -28,6 +28,11 @@ abstract class NotificationService {
   Future<ApiResponse> getNotifications();
 }
 
+abstract class MessageServce {
+  Future<ApiResponse> getConversations();
+  Future<ApiResponse> sendMessage(String recipientId, String message);
+}
+
 class ApiResponse {
   final int statusCode;
   final dynamic data;

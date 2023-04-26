@@ -67,3 +67,57 @@ class _AuthFieldState extends State<AuthField> {
     );
   }
 }
+
+class NormalTextFeild extends StatefulWidget {
+  final TextEditingController controller;
+  const NormalTextFeild({Key? key, required this.controller}) : super(key: key);
+
+  @override
+  State<NormalTextFeild> createState() => _NormalTextFeildState();
+}
+
+class _NormalTextFeildState extends State<NormalTextFeild> {
+  bool validate = false;
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: widget.controller,
+      decoration: InputDecoration(
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: validate == true
+              ? const BorderSide(color: Colors.red, width: 1)
+              : BorderSide.none,
+        ),
+        enabledBorder: OutlineInputBorder(
+          gapPadding: 0,
+          borderRadius: BorderRadius.circular(10),
+          borderSide: widget.controller.text.isEmpty
+              ? BorderSide.none
+              : const BorderSide(color: AppColors.greyColor, width: 1),
+        ),
+        disabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide.none,
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: const BorderSide(color: Colors.red),
+        ),
+        // icon: const Icon(Icons.calendar_today),
+        fillColor: AppColors.greyColor,
+        filled: true,
+        hintText: 'Type your message here',
+        // hintStyle: style(FontWeight.w600, 16, textColorGrey),
+        contentPadding: const EdgeInsets.only(top: 5, left: 10),
+      ),
+      // style: style(FontWeight.w600, 17, textColorBlack),
+      validator: (value) {
+        if (value!.isEmpty) {
+          return "Please enter a date for your task";
+        }
+        return null;
+      },
+    );
+  }
+}

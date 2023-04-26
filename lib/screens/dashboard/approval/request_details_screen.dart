@@ -1,5 +1,6 @@
 import 'package:expense_tracker/constants/app_colors.dart';
 import 'package:expense_tracker/providers/request_provider.dart';
+import 'package:expense_tracker/screens/dashboard/messages/chat_screen.dart';
 import 'package:expense_tracker/widgets/app_button.dart';
 import 'package:expense_tracker/widgets/success_screen.dart';
 import 'package:flutter/material.dart';
@@ -302,7 +303,16 @@ class _PendingRequestScreenState extends State<PendingRequestScreen> {
                 width: size.width * 0.4,
                 child: AppButton(
                   text: 'Message',
-                  onPressed: () {},
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return ChatScreen(
+                          id: widget.data!.userId!,
+                        );
+                      },
+                    ),
+                  ),
                   color: AppColors.blueColor,
                   textColor: Colors.white,
                   hasImage: true,
@@ -475,8 +485,8 @@ Widget listTile(String title, String subtitle) {
     ),
     trailing: Text(
       subtitle,
-      style: GoogleFonts.poppins(
-        color: const Color(0xff000303),
+      style: const TextStyle(
+        color: Color(0xff000303),
         fontSize: 14,
         fontWeight: FontWeight.w500,
       ),
